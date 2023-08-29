@@ -93,35 +93,33 @@ exports.login = async(req,res) =>{
             });
 
 
-            const varifiedUser = user.toObject();
-            varifiedUser.token = token;
-            varifiedUser.password = undefined;
+            user = user.toObject();
+            user.token = token;
+            user.password = undefined;
            
             //cresting cookie ->add cookie name
             const options = {
                 expires: new Date(Date.now() + 3*24*60*60*1000),
                 httpOnly:true,
             }
-            res.cookie("token",token,options).status(200).json({
-                success:true,
+            res.cookie("token", token, options).status(200).json({
+                success: true,
                 token,
-                varifiedUser,
-                message:"user logged in successfully",
+                user,
+                message: "User logged in successfully",
+            });
+        } else {
+            // Password is not matched
+            return res.status(403).json({
+                success: false,
+                message: "Invalid credentials",
             });
         }
-        else{
-            //password is not matched
-            return res.status(403).json({
-                success:false,
-                message:"Invalid credentials"
-            })
-        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to login",
+        });
     }
-    catch(error){
-            console.log(error);
-            return res.status(500).json({
-                success:false,
-                message:"Failed to login"
-            })
-    }
-}
+};

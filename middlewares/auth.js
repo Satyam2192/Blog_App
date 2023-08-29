@@ -8,7 +8,8 @@ exports.auth = (req,res,next)=>{
     try{
         //extract jwt token
         //PENDING:other ways to fetch token (total 3 ways 1->req.body.token , 2->req.cookie.token, 3->pending)
-        const token = req.body.token;
+        // const token = req.body.token;
+        const token = req.cookie.token;
         if(!token){
             return res.status(401).json({
                 success:false,
@@ -18,11 +19,59 @@ exports.auth = (req,res,next)=>{
 
         //varify the token
         try{
-            const decode = jwt.verify(token, process.env.JWT_SECRET);
-            console.log(decode);
+            const payload = jwt.verify(token, process.env.JWT_SECRET);
+            console.log(payload);
+            req.user = payload
+        }catch(error){
+            return res.status(500).json({
+            success:false,
+            message:"token is invalid",
+        })
         }
 
-    } catch(error){
+        next();
 
+
+    }catch(error){
+        return res.status(401).json({
+            success:false,
+            message:"something went wrong",
+        })
     }
+}
+
+exports.isStudent = (req,res,next) =>{
+    try {
+        if(req.user.role !== "Student"){
+            return res.status(401).json({
+                success:false,
+                message:"only students have access"
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"user role is not matching",
+        })
+    }
+    
+}
+
+exports.isAdmin = (req,res,next) =>{
+    try {
+        if(req.user.role !== "Admin"){
+            return res.status(401).json({
+                success:false,
+                message:"only Admin have access"
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"user role is not matching",
+        })
+    }
+    
 }
