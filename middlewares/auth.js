@@ -1,4 +1,4 @@
-// auth, isStudent, is Admin
+// auth, isuser, is Admin
 
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -9,7 +9,9 @@ exports.auth = (req,res,next)=>{
         //extract jwt token
         //PENDING:other ways to fetch token (total 3 ways 1->req.body.token , 2->req.cookie.token, 3->pending)
         // const token = req.body.token;
-        const token = req.body.token;
+        console.log(req.cookies.token);
+        console.log(req.header("Authorization".replace("Bearer", "")));
+        const token = req.cookies.token // ||req.body.token || req.header("Authorization").replace("Bearer", "");
         console.log("token is->",token)
         if(!token){
             return res.status(401).json({
@@ -42,12 +44,12 @@ exports.auth = (req,res,next)=>{
     }
 }
 
-exports.isStudent = (req,res,next) =>{
+exports.isuser = (req,res,next) =>{
     try {
-        if(req.user.role !== "Student"){
+        if(req.user.role !== "user"){
             return res.status(401).json({
                 success:false,
-                message:"only students have access"
+                message:"only users have access"
             })
         }
         next();

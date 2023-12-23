@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
 const User = require('../models/user');
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { models } = require("mongoose");
 require("dotenv").config();
-
 
 // signup route handler
 exports.signup = async (req, res) => {
@@ -108,6 +108,12 @@ exports.login = async(req,res) =>{
                 user,
                 message: "User logged in successfully",
             });
+            // res.status(200).json({
+            //     success: true,
+            //     token,
+            //     user,
+            //     message: "User logged in successfully",
+            // });
         } else {
             // Password is not matched
             return res.status(403).json({

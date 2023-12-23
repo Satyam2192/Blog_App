@@ -3,7 +3,7 @@ const router =  express.Router();
 
 
 const {login, signup}= require('../Controllers/Auth');
-const {auth, isStudent, isAdmin} = require("../middlewares/auth");
+const {auth, isuser, isAdmin} = require("../middlewares/auth");
 
 router.post('/login', login);
 router.post('/signup', signup);
@@ -18,10 +18,10 @@ router.get("/test", auth, (req,res)=>{
 })
 
 //protected routes
-router.get("/student", auth, isStudent, (req,res)=>{
+router.get("/user", auth, isuser, (req,res)=>{
     res.json({
         success:true,
-        message:"welcome to the Protected for student",
+        message:"welcome to the Protected for user",
     });
 })
 
