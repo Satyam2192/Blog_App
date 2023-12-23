@@ -1,4 +1,8 @@
-Blog App Documentation
+Blog App Documentation:
+
+Postman : https://documenter.getpostman.com/view/31555061/2s9Ykrc19y
+
+
 Overview
 The Blog App is a versatile Blogging Platform built using Node.js, Express.js, and MongoDB. This API supports user authentication and provides CRUD operations for managing blog posts.
 
